@@ -1,6 +1,6 @@
 # p2p-mDNS
 
-This is a peer-to-peer app to show the existence of other peers vie mDNS. This app is developed with Electron and Python.
+This is a peer-to-peer app to show the presence of other peers vie mDNS. This app is developed with Electron and Python.
 
 To start this app, follow these instructions:
 
