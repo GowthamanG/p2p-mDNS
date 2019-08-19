@@ -1,0 +1,22 @@
+{
+  "name": "p2p-mdns",
+  "version": "1.0.0",
+  "description": "Peer-to-peer app to show the presence of other peers via mDNS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GowthamanG/p2p-mDNS.git"
+  },
+  "author": "Gowthaman Gobalasingam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GowthamanG/p2p-mDNS/issues"
+  },
+  "homepage": "https://github.com/GowthamanG/p2p-mDNS#readme",
+  "devDependencies": {
+    "electron": "^6.0.2"
+  }
+}
