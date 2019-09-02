@@ -1,6 +1,6 @@
 const electron = require('electron');
 const {app, BrowserWindow, Menu, ipcMain} = electron;
-const multicast = require('multicast-dns');
+const multicast = require('./multicast-dns');
 
 
 let win;
@@ -28,8 +28,8 @@ function createWindow(){
     win.webContents.openDevTools();
 
     win.on('closed', () => {
-        win = null;
         mdns.destroy();
+        win = null;
     });
 }
 
@@ -72,17 +72,5 @@ app.on('activate', () => {
     }
 });
 
-mdns.on('response', function(response){
-    console.log('got a response packet: ', response);
-});
 
-mdns.on('query', function(query){
-    console.log('got a query packet: ', query);
-});
-
-mdns.query({
-    questions:[{
-        name: 'MyMacBook.local',
-        type: 'A'
-    }]
-});
+console.log(mdns.getPeers());

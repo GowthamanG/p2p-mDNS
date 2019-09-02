@@ -20,6 +20,10 @@
     "electron": "^6.0.5"
   },
   "dependencies": {
-    "multicast-dns": "^7.2.0"
+    "g": "^2.0.1",
+    "multicast-dns": "^7.2.0",
+    "npm": "^6.11.2",
+    "dns-packet": "latest",
+    "thunky": "latest"
   }
 }
