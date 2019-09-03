@@ -1,18 +1,12 @@
 const electron = require('electron');
 const {app, BrowserWindow, Menu, ipcMain} = electron;
-const multicast = require('./multicast-dns');
+const peerDiscovery = require('./peerDiscovery');
+const os = require('os');
 
 
 let win;
+let mdns = new peerDiscovery();
 
-let mdns = multicast({
-    multicast: true,
-    port: 5353,
-    ip: '224.0.0.251',
-    ttl: 255,
-    loopback: true,
-    reuseAddr: true
-});
 
 function createWindow(){
     win = new BrowserWindow({
@@ -28,7 +22,6 @@ function createWindow(){
     win.webContents.openDevTools();
 
     win.on('closed', () => {
-        mdns.destroy();
         win = null;
     });
 }
@@ -60,7 +53,6 @@ app.on('ready', createWindow); //Listen for app to be ready
 
 app.on('window-all-closed', () => {
     if(process.platform !== 'darwin'){
-        mdns.destroy();
         app.quit();
 
     }
@@ -72,5 +64,12 @@ app.on('activate', () => {
     }
 });
 
+mdns.listen().on('new_hostname', (found_hostnames) => {
+    console.log('found_hostnames', found_hostnames)
+    // -- MORE CODE Here !
 
-console.log(mdns.getPeers());
+    // --!
+});
+
+
+

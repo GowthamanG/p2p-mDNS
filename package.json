@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/GowthamanG/p2p-mDNS#readme",
   "devDependencies": {
-    "electron": "^6.0.5"
+    "electron": "^6.0.5",
+    "network-address": "^1.1.2"
   },
   "dependencies": {
     "g": "^2.0.1",
