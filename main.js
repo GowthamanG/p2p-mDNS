@@ -1,12 +1,8 @@
 const electron = require('electron');
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 const peerDiscovery = require('./peerDiscovery');
-const os = require('os');
-
 
 let win;
-let mdns = new peerDiscovery();
-
 
 function createWindow(){
     win = new BrowserWindow({
@@ -64,12 +60,11 @@ app.on('activate', () => {
     }
 });
 
-mdns.listen().on('new_hostname', (found_hostnames) => {
-    console.log('found_hostnames', found_hostnames)
-    // -- MORE CODE Here !
+let peerd = peerDiscovery();
 
-    // --!
-});
+
+
+
 
 
 
