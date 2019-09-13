@@ -1,8 +1,8 @@
 # p2p-mDNS
 
-This is a peer-to-peer app to show the presence of other peers vie mDNS. This app is developed with Electron and Python.
+This is a peer-to-peer app to show the presence of other peers via mDNS. This app is developed with Electron.
 
-To start this app, follow these instructions:
+To start this app, follow below the instructions:
 
 1. Clone this repository
 2. Make sure you have installed Node.js, if not, download it from the website: https://nodejs.org/en/download/
