@@ -3,6 +3,7 @@ const {app, BrowserWindow, Menu, ipcMain} = electron;
 const peerDiscovery = require('./peerDiscovery');
 
 let win;
+let appClosed = false;
 
 function createWindow(){
     win = new BrowserWindow({
@@ -50,7 +51,7 @@ app.on('ready', createWindow); //Listen for app to be ready
 app.on('window-all-closed', () => {
     if(process.platform !== 'darwin'){
         app.quit();
-
+        appClosed = true;
     }
 });
 
@@ -60,7 +61,19 @@ app.on('activate', () => {
     }
 });
 
-let peerd = peerDiscovery();
+
+let mdns = peerDiscovery.mdns;
+
+while(true) {
+    peerDiscovery(mdns);
+    console.log(peerDiscovery.getPeers());
+
+    if(appClosed){
+        peerDiscovery.stopPeerdiscovery(mdns);
+        break;
+    }
+}
+
 
 
 

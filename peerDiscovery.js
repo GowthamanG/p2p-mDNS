@@ -25,33 +25,46 @@ class Peer {
 let peers = [];
 let thisPeer = new Peer(os.hostname(), addr.ipv4());
 
-module.exports = function peerDiscovery(){
+module.exports = {
 
-    let mdns = multicastdns();
+    mdns: multicastdns(),
 
-    mdns.query([{
-        name: thisPeer.hostname,
-        type: 'A'
-    }]);
+    getPeers: function(){
+        return peers;
+    },
 
-    mdns.respond([{
-        name: thisPeer.hostname,
-        type: 'A',
-        data: thisPeer.ip
-    }]);
+    getThisPeer: function(){
+        return thisPeer;
+    },
 
-    mdns.on('response', function(response){
-       if(response.answers[0].hostname !== thisPeer.hostname) {
-           if (!peers.includes(Peer(response.answers[0].name, response.answers[0].data)))
-               peers.push(new Peer(response.answers[0].name, response.answers[0].data));
-       }
+    peerDiscovery: function(mdns) {
 
-    });
+        mdns.query([{
+            name: thisPeer.hostname,
+            type: 'A'
+        }]);
 
-    console.log(thisPeer);
-    console.log(peers);
+        mdns.respond([{
+            name: thisPeer.hostname,
+            type: 'A',
+            data: thisPeer.ip
+        }]);
+
+        mdns.on('response', function (response) {
+            if (response.answers[0].hostname !== thisPeer.hostname) {
+                if (!peers.includes(new Peer(response.answers[0].name, response.answers[0].data)))
+                    peers.push(new Peer(response.answers[0].name, response.answers[0].data));
+            }
+
+        });
+    },
+
+    stopPeerdiscovery: function(mdns){
+        mdns.destroy();
+    }
+
 };
-
+/*
 function getPeers(){
     return peers;
 }
@@ -77,3 +90,5 @@ function updatePeersData(){
        })
     });
 }
+*/
+
