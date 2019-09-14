@@ -1,7 +1,7 @@
 const electron = require('electron');
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 const peerDiscovery = require('./peerDiscovery');
-
+const multicastdns = require('multicast-dns');
 let win;
 let appClosed = false;
 
@@ -62,16 +62,13 @@ app.on('activate', () => {
 });
 
 
-let mdns = peerDiscovery.mdns;
+let mdns = multicastdns();
 
-while(true) {
-    peerDiscovery.discover(mdns);
+peerDiscovery.discover(mdns);
 
-    if(appClosed){
-        peerDiscovery.stopPeerdiscovery(mdns);
-        break;
-    }
-}
+if(appClosed)
+    peerDiscovery.stopPeerdiscovery(mdns);
+
 
 
 

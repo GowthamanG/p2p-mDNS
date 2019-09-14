@@ -5,7 +5,7 @@ const addr = require('network-address');
 class Peer {
 
     constructor(hostname, ip){
-        this.hostname = hostname.toString() + '.local';
+        this.hostname = hostname.toString();
         this.ip = ip.toString();
     }
 
@@ -26,8 +26,6 @@ let peers = [];
 let thisPeer = new Peer(os.hostname(), addr.ipv4());
 
 module.exports = {
-
-    mdns: multicastdns(),
 
     getPeers: function(){
         return peers;
