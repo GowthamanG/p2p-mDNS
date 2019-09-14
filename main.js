@@ -68,12 +68,3 @@ peerDiscovery.discover(mdns);
 
 if(appClosed)
     peerDiscovery.stopPeerdiscovery(mdns);
-
-
-
-
-
-
-
-
-
