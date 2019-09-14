@@ -37,7 +37,7 @@ module.exports = {
         return thisPeer;
     },
 
-    peerDiscovery: function(mdns) {
+    discover: function(mdns) {
 
         mdns.query([{
             name: thisPeer.hostname,
@@ -55,6 +55,7 @@ module.exports = {
                 if (!peers.includes(new Peer(response.answers[0].name, response.answers[0].data)))
                     peers.push(new Peer(response.answers[0].name, response.answers[0].data));
             }
+            console.log(peers);
 
         });
     },

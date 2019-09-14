@@ -65,8 +65,7 @@ app.on('activate', () => {
 let mdns = peerDiscovery.mdns;
 
 while(true) {
-    peerDiscovery(mdns);
-    console.log(peerDiscovery.getPeers());
+    peerDiscovery.discover(mdns);
 
     if(appClosed){
         peerDiscovery.stopPeerdiscovery(mdns);
