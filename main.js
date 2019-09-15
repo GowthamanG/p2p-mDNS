@@ -64,7 +64,10 @@ app.on('activate', () => {
 
 let mdns = multicastdns();
 
-peerDiscovery.discover(mdns);
+ipcMain.on('Peers', function(event){
+    peerDiscovery.discover(mdns);
+    event.sender.send('Peers', peerDiscovery.getPeers());
+});
 
 if(appClosed)
     peerDiscovery.stopPeerdiscovery(mdns);

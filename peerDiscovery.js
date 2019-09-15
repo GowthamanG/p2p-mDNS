@@ -1,4 +1,3 @@
-const multicastdns = require('multicast-dns');
 const os = require('os');
 const addr = require('network-address');
 
@@ -24,6 +23,7 @@ class Peer {
 
 let peers = [];
 let thisPeer = new Peer(os.hostname(), addr.ipv4());
+peers.push(thisPeer);
 
 module.exports = {
 
@@ -49,11 +49,14 @@ module.exports = {
         }]);
 
         mdns.on('response', function (response) {
-            if (response.answers[0].hostname !== thisPeer.hostname) {
+
+            if (response.answers[0].name !== thisPeer.hostname) {
                 if (!peers.includes(new Peer(response.answers[0].name, response.answers[0].data)))
                     peers.push(new Peer(response.answers[0].name, response.answers[0].data));
             }
             console.log(peers);
+            console.log(peers.length);
+
 
         });
     },
