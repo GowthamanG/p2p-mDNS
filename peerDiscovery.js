@@ -37,11 +37,22 @@ module.exports = {
 
     discover: function(mdns) {
 
-        mdns.respond([{
-            name: thisPeer.hostname,
+        mdns.query([{
+            name: 'Hello',
             type: 'A',
-            data: thisPeer.ip
         }]);
+
+        mdns.on('query', function(query){
+            if(query.name === 'Hello'){
+                mdns.respond([{
+                    name: thisPeer.hostname,
+                    type: 'A',
+                    ttl: 300,
+                    data: thisPeer.ip
+                }]);
+            }
+        });
+
 
 
         mdns.on('response', function (response) {
@@ -66,7 +77,7 @@ module.exports = {
 
             console.log(peers);
             console.log(peers.length);
-
+            console.log(response.answers[0]);
 
         });
     },
