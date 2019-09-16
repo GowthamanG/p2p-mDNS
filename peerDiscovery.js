@@ -38,22 +38,18 @@ module.exports = {
     discover: function(mdns) {
 
         mdns.query([{
-            name: 'Hello',
+            name: 'gowthaman-macbook-pro.home',
             type: 'A',
         }]);
 
-        mdns.on('query', function(query){
-            if(query.name === 'Hello'){
-                mdns.respond([{
-                    name: thisPeer.hostname,
-                    type: 'A',
-                    ttl: 300,
-                    data: thisPeer.ip
-                }]);
-            }
-        });
 
 
+        mdns.respond([{
+            name: thisPeer.hostname,
+            type: 'A',
+            ttl: 300,
+            data: thisPeer.ip
+        }]);
 
         mdns.on('response', function (response) {
 
@@ -62,13 +58,13 @@ module.exports = {
                 for (let i = 0; i < peers.length; i++) {
                     let currentPeer = peers[i];
 
-                    if(currentPeer.hostname !== response.answers[0].name && currentPeer.port !== response.answers[0].data){
+                    if(currentPeer.hostname !== response.answers[0].name && currentPeer.data !== response.answers[0].data){
                         let new_Peer = new Peer(response.answers[0].name, response.answers[0].data);
                         peers.push(new_Peer);
-                    }else if (currentPeer.hostname === response.answers[0].name && currentPeer.port !== response.answers[0].data) {
-                        currentPeer.port = response.answers[0].data;
+                    }else if (currentPeer.hostname === response.answers[0].name && currentPeer.data !== response.answers[0].data) {
+                        currentPeer.data = response.answers[0].data;
                         peers[i] = currentPeer;
-                    } else if (currentPeer.hostname !== response.answers[0].name && currentPeer.port === response.answers[0].data) {
+                    } else if (currentPeer.hostname !== response.answers[0].name && currentPeer.data === response.answers[0].data) {
                         currentPeer.hostname = response.answers[0].name;
                         peers[i] = currentPeer;
                     }
@@ -77,7 +73,6 @@ module.exports = {
 
             console.log(peers);
             console.log(peers.length);
-            console.log(response.answers[0]);
 
         });
     },
