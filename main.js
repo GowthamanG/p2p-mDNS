@@ -2,6 +2,7 @@ const electron = require('electron');
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 const peerDiscovery = require('./peerDiscovery');
 const multicastdns = require('multicast-dns');
+
 let win;
 let appClosed = false;
 

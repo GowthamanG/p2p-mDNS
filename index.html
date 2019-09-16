@@ -34,8 +34,8 @@
         ipcRenderer.on('Peers', function(e, item){
 
             for (let i = 0; i < item.length; i++) {
-                let host = document.createTextNode(item[0].hostname);
-                let ip = document.createTextNode(item[0].ip);
+                let host = document.createTextNode(item[i].hostname);
+                let ip = document.createTextNode(item[i].ip);
                 let tr = document.createElement('tr');
                 let td_1 = document.createElement('td');
                 let td_2 = document.createElement('td');
