@@ -74,14 +74,14 @@ module.exports = {
                     for (let i = 0; i < peers.length; i++) {
                         let currentPeer = peers[i];
 
-                        if (currentPeer.hostname !== response.answers[0].data.target && currentPeer.ip !== response.answers[1].data) {
+                        if (currentPeer.hostname !== response.answers[0].data.target.toString() && currentPeer.ip !== response.answers[1].data.toString()) {
                             let new_Peer = new Peer(response.answers[0].data.target, response.answers[1].data);
                             peers.push(new_Peer);
-                        } else if (currentPeer.hostname === response.answers[0].data.target && currentPeer.ip !== response.answers[1].data) {
-                            currentPeer.ip = response.answers[1].data;
+                        } else if (currentPeer.hostname === response.answers[0].data.target.toString() && currentPeer.ip !== response.answers[1].data.toString()) {
+                            currentPeer.ip = response.answers[1].data.toString();
                             peers[i] = currentPeer;
-                        } else if (currentPeer.hostname !== response.answers[0].data.target && currentPeer.ip === response.answers[1].data) {
-                            currentPeer.hostname = response.answers[0].data.target;
+                        } else if (currentPeer.hostname !== response.answers[0].data.target.toString() && currentPeer.ip === response.answers[1].data.toString()) {
+                            currentPeer.hostname = response.answers[0].data.target.toString();
                             peers[i] = currentPeer;
                         }
                     }
