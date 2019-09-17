@@ -37,33 +37,47 @@ module.exports = {
 
     discover: function(mdns) {
 
-        mdns.query([{
-            name: thisPeer.hostname,
-            type: 'A',
-        }]);
+        mdns.query({
+            questions: [{
+                name: 'discover',
+                type: 'SRV'
+            },{
+                name: 'discover',
+                type: 'A'
 
-        mdns.respond([{
-            name: thisPeer.hostname,
-            type: 'A',
-            ttl: 300,
-            data: thisPeer.ip
-        }]);
+            }]
+        });
+
+        mdns.respond({
+            answers: [{
+                name: 'discover',
+                type: 'SRV',
+                data: {
+                    target: thisPeer.hostname
+                }
+            }, {
+                name: 'discover',
+                type: 'A',
+                data: thisPeer.ip
+            }]
+
+        });
 
         mdns.on('response', function (response) {
 
-            if(response.answers[0].name !== thisPeer.hostname) {
+            if(response.answers[0].name === 'discover') {
 
                 for (let i = 0; i < peers.length; i++) {
                     let currentPeer = peers[i];
 
-                    if(currentPeer.hostname !== response.answers[0].name && currentPeer.ip !== response.answers[0].data){
-                        let new_Peer = new Peer(response.answers[0].name, response.answers[0].data);
+                    if(currentPeer.hostname !== response.answers[0].data.target && currentPeer.ip !== response.answers[1].data){
+                        let new_Peer = new Peer(response.answers[0].data.target, response.answers[1].data);
                         peers.push(new_Peer);
-                    }else if (currentPeer.hostname === response.answers[0].name && currentPeer.ip !== response.answers[0].data) {
+                    }else if (currentPeer.hostname === response.answers[0].data.target && currentPeer.ip !== response.answers[1].data) {
                         currentPeer.ip = response.answers[0].data;
                         peers[i] = currentPeer;
-                    } else if (currentPeer.hostname !== response.answers[0].name && currentPeer.ip === response.answers[0].data) {
-                        currentPeer.hostname = response.answers[0].name;
+                    } else if (currentPeer.hostname !== response.answers[0].data.target && currentPeer.ip === response.answers[1].data) {
+                        currentPeer.hostname = response.answers[0].data.target;
                         peers[i] = currentPeer;
                     }
                 }
