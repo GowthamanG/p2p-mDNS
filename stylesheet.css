@@ -1,0 +1,31 @@
+body{
+    background-color: beige;
+}
+
+#p2p-title{
+
+    font-family: "Century Gothic", "Arial", "Times New Roman";
+    color: azure;
+    text-align: center;
+    background-color: lightcoral;
+
+}
+
+#tablePeers{
+
+    width: 100%;
+    font-family: "Century Gothic", "Arial", "Times New Roman";
+
+}
+
+th, td{
+    padding: 1px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+
+    background-color: #f2f2f2;
+
+}
+

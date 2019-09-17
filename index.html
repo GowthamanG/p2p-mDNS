@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <title>P2P mDNS</title>
 
+    <link rel="stylesheet" href="stylesheet.css">
+
 </head>
 
 <body>
 
-<h1>P2P Multicast DNS</h1>
+<h1 id="p2p-title">P2P Multicast DNS</h1>
 
 <ul id="listOfPeers"></ul>
 <button id="Peers">Refresh</button>
@@ -28,16 +30,26 @@
         ipcRenderer.send('Peers');
     });
     ipcRenderer.on('Peers', function(e, item){
+
+        let th_1 = document.createElement('th');
+        let th_2 = document.createElement('th');
+        th_1.innerHTML = 'Peers';
+        th_2.innerHTML = 'IPv4-Address';
+        table.appendChild(th_1);
+        table.appendChild(th_2);
+
         for (let i = 0; i < item.length; i++) {
-            let host = document.createTextNode(item[i].hostname);
-            let ip = document.createTextNode(item[i].ip);
+            /*let host = document.createTextNode(item[i].hostname);
+            let ip = document.createTextNode(item[i].ip);*/
             let tr = document.createElement('tr');
             let td_1 = document.createElement('td');
             let td_2 = document.createElement('td');
-            td_1.appendChild(host);
-            td_2.appendChild(ip);
-            tr.appendChild(host);
-            tr.appendChild(ip);
+            /*td_1.appendChild(host);
+            td_2.appendChild(ip);*/
+            td_1.innerHTML = item[i].hostname;
+            td_2.innerHTML = item[i].ip;
+            tr.appendChild(td_1);
+            tr.appendChild(td_2);
             table.appendChild(tr);
         }
     })
