@@ -1,4 +1,4 @@
-#p2p-mDNS
+# p2p-mDNS
 
 This is a peer-to-peer app to show the presence of other peers via mDNS. This app is developed with Electron.
 
