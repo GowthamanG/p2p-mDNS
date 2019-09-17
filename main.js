@@ -24,28 +24,6 @@ function createWindow(){
     });
 }
 
-
-/*
-if(process.env.NODE_ENV !== 'production'){
-    mainMenuTemplate.push({
-        label: 'Developer Tools',
-        submenu:[   //Same devtools as the chrome has
-            {
-                label: 'Toggle DevTools',
-                accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
-                click(item, focusedWindow){
-                    focusedWindow.toggleDevTools();
-                }
-            },
-            {
-                role: 'reload'
-            }
-        ]
-    })
-}
-*/
-
-
 app.on('ready', createWindow); //Listen for app to be ready
 
 app.on('window-all-closed', () => {
