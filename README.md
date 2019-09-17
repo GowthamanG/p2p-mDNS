@@ -1,7 +1,7 @@
 # p2p-mDNS
 
-This is a peer-to-peer app to show the presence of other peers via mDNS in a local network. This app is developed with Electron. You can see
-below a screenshot of the application.
+This is a peer-to-peer app to show the presence of other peers via mDNS in a local network. This app is developed with [Electron](https://electronjs.org/). 
+You can see below a screenshot of the application.
 
 ![Screenshot](Figures/app.png)
 
