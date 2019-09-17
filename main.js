@@ -67,7 +67,7 @@ let mdns = multicastdns();
 
 ipcMain.on('Peers', function(event){
     peerDiscovery.discover(mdns);
-    event.sender.send('Peers', peerDiscovery.getPeers());
+    event.reply('Peers', peerDiscovery.getPeers());
 });
 
 if(appClosed)

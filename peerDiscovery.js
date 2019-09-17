@@ -38,11 +38,9 @@ module.exports = {
     discover: function(mdns) {
 
         mdns.query([{
-            name: 'gowthaman-macbook-pro.home',
+            name: thisPeer.hostname,
             type: 'A',
         }]);
-
-
 
         mdns.respond([{
             name: thisPeer.hostname,
