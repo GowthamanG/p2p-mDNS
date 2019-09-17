@@ -29,3 +29,11 @@ tr:nth-child(even) {
 
 }
 
+#Refresh{
+
+    height: 20px;
+    width: 70px;
+    padding: 1px;
+    text-align: center;
+    position: relative;
+}
