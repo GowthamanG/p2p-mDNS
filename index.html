@@ -1,19 +1,49 @@
 <!DOCTYPE html>
 
-    <head>
+<head>
 
-        <meta charset="UTF-8">
-        <title>P2P mDNS</title>
+    <meta charset="UTF-8">
+    <title>P2P mDNS</title>
 
-    </head>
+</head>
 
-    <body>
+<body>
 
-    <h1>P2P Multicast DNS</h1>
+<h1>P2P Multicast DNS</h1>
 
-    <ul></ul>
+<ul id="listOfPeers"></ul>
+<button id="Peers">Refresh</button>
+
+<table id="tablePeers"></table>
+
+<script type="text/javascript">
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+    let ul = document.getElementById('listOfPeers');
+    let table = document.getElementById('tablePeers');
+    const Peers = document.getElementById('Peers');
+    Peers.addEventListener('click', function(){
+        ul.textContent = "";
+        table.textContent = "";
+        ipcRenderer.send('Peers');
+    });
+    ipcRenderer.on('Peers', function(e, item){
+        for (let i = 0; i < item.length; i++) {
+            let host = document.createTextNode(item[i].hostname);
+            let ip = document.createTextNode(item[i].ip);
+            let tr = document.createElement('tr');
+            let td_1 = document.createElement('td');
+            let td_2 = document.createElement('td');
+            td_1.appendChild(host);
+            td_2.appendChild(ip);
+            tr.appendChild(host);
+            tr.appendChild(ip);
+            table.appendChild(tr);
+        }
+    })
+</script>
 
 
-    </body>
+</body>
 
 </html>

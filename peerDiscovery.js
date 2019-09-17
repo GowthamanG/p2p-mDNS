@@ -1,118 +1,101 @@
-const multicast = require('multicast-dns');
-const net = require('net');
+const os = require('os');
 const addr = require('network-address');
 
+class Peer {
 
-module.exports = function peerDiscovery (name, opts, fn){
-
-    if (typeof opts === 'function')
-        return peerDiscovery (name, null, opts);
-    if (!opts)
-        opts = {};
-
-    var limit = opts.limit || Infinity;
-    var connections = {};
-
-    let mdns = multicast({
-        multicast: true,
-        port: 5353,
-        ip: '224.0.0.251',
-        ttl: 255,
-        loopback: true,
-        reuseAddr: true
-    });
-
-    var server = net.createServer(function(sock){
-        sock.on('error', function(err){
-            sock.destroy(err)
-        });
-        track(sock)
-    });
-
-    server.peers = [];
-
-    function track(sock){
-        server.peers.push(sock);
-        sock.on('close', function(){
-            server.peers.splice(server.peers.indexOf(sock), 1)
-        });
-        server.emit('peer', sock);
+    constructor(hostname, ip){
+        this.hostname = hostname.toString();
+        this.ip = ip.toString();
     }
 
-    server.on('listening', function() {
-        var host = addr();
-        var port = server.address().port;
-        var id = host;
+    updateHostname(hostname){
 
-        mdns.on('query', function (q) {
-            for (var i = 0; i < q.questions.length; i++) {
-                var qs = q.questions[i];
-                if (qs.name === name && qs.type === 'SRV')
-                    return respond();
-            }
-        });
+        if (this.hostname !== hostname)
+            this.hostname = hostname.toString();
+    }
 
-        mdns.on('response', function (r) {
-            for (var i = 0; i < r.answers.length; i++) {
-                var a = r.answers[i];
-                if (a.name === name && a.type === 'SRV')
-                    connect(a.data.target, a.data.port);
-            }
-        });
+    updateIp(ip){
 
-        update();
-        var interval = setInterval(update, 3000);
+        if(this.ip !== ip)
+            this.ip = ip.toString();
+    }
+}
 
-        server.on('close', function () {
-            clearInterval(interval);
-        });
+let peers = [];
+let thisPeer = new Peer(os.hostname(), addr.ipv4());
+peers.push(thisPeer);
 
-        function respond() {
-            mdns.response([{
-                name: name,
-                type: 'SRV',
-                data: {
-                    port: port,
-                    weigth: 0,
-                    priority: 10,
-                    target: host
+module.exports = {
+
+    getPeers: function(){
+        return peers;
+    },
+
+    getThisPeer: function(){
+        return thisPeer;
+    },
+
+    discover: function(mdns) {
+
+        mdns.query([{
+            name: thisPeer.hostname,
+            type: 'A',
+        }]);
+
+        mdns.respond([{
+            name: thisPeer.hostname,
+            type: 'A',
+            ttl: 300,
+            data: thisPeer.ip
+        }]);
+
+        mdns.on('response', function (response) {
+
+            if(response.answers[0].name !== thisPeer.hostname) {
+
+                for (let i = 0; i < peers.length; i++) {
+                    let currentPeer = peers[i];
+
+                    if(currentPeer.hostname !== response.answers[0].name && currentPeer.ip !== response.answers[0].data){
+                        let new_Peer = new Peer(response.answers[0].name, response.answers[0].data);
+                        peers.push(new_Peer);
+                    }else if (currentPeer.hostname === response.answers[0].name && currentPeer.ip !== response.answers[0].data) {
+                        currentPeer.ip = response.answers[0].data;
+                        peers[i] = currentPeer;
+                    } else if (currentPeer.hostname !== response.answers[0].name && currentPeer.ip === response.answers[0].data) {
+                        currentPeer.hostname = response.answers[0].name;
+                        peers[i] = currentPeer;
+                    }
                 }
-            }])
-        }
+            }
 
-        function update() {
-            if (server.peers.length < limit)
-                mdns.query([{
-                    name: name,
-                    type: 'SRV'
-                }])
-        }
+            console.log(peers);
+            console.log(peers.length);
 
-        function connect(host, port) {
-            var remoteId = host + ':' + port;
+        });
+    },
 
-            if (remoteId === id)
-                return;
-            if (connections[remoteId])
-                return;
-            if (remoteId < id)
-                return respond();
-
-            var sock = connections[remoteId] = net.connect(port, host);
-
-            sock.on('error', function () {
-                sock.destroy();
-            });
-
-            track(sock);
-        }
-    });
-
-    if (fn)
-        server.on('peer', fn);
-
-    server.listen(0);
-
-    return server;
+    stopPeerdiscovery: function(mdns){
+        mdns.destroy();
+    }
 
 };
+/*
+function getPeers(){
+    return peers;
+}
+function createNameRandomly(name){
+    let randomNumber = (Math.random() * 20) + 1;
+    return name.toString().replace('.local', '_' + randomNumber + '.local');
+}
+function updatePeersData(){
+    thisPeer.updateIp(addr.ipv4());
+    peers.forEach(value => {
+       mdns.query(value().hostname.toString(), 'SRV');
+       mdns.on('query', function(query){
+           if(query.address.toString() !== value().ip.toString())
+               value.updateIp(query.address.toString());
+       })
+    });
+}
+*/

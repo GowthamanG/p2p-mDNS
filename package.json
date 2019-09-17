@@ -21,6 +21,6 @@
     "network-address": "^1.1.2"
   },
   "dependencies": {
-    "multicast-dns": "^7.2.0"
+    "multicast-dns": "latest"
   }
 }
