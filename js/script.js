@@ -10,7 +10,6 @@ setInterval(updateTable, 2000);
 
 
 function updateTable() {
-    $("#tablePeers").empty();
     ipcRenderer.send('Peers');
     ipcRenderer.send('MyPeer');
 }
@@ -22,21 +21,22 @@ ipcRenderer.on('MyPeer', function (e, item) {
 
 ipcRenderer.on('Peers', function (e, item) {
 
-    let th_1 = $("<th></th>").text("Hostname");
-    let th_2 = $("<th></th>").text("IPv4 Adress");
-
-    $("#tablePeers").append($("<tr></tr>").append(th_1, th_2));
-
     for (let i = 0; i < item.length; i++) {
+        if($('#tablePeers').text().indexOf(item[i].hostname) !== -1) {
+            break;
+        }
+        else {
 
-        let tr_hostname = $("<td></td>").text(item[i].hostname);
-        let tr_ipAdress = $("<td></td>").text(item[i].ip);
+            let td_hostname = $("<td></td>").text(item[i].hostname);
+            let td_ipAdress = $("<td></td>").text(item[i].ip);
 
-        if (thisPeerHostName === item[i].hostname && thisPeerIp === item[i].ip) {
-            tr_hostname.css("background-color", "Aquamarine");
-            tr_ipAdress.css("background-color", "Aquamarine");
+            if (thisPeerHostName === item[i].hostname && thisPeerIp === item[i].ip) {
+                td_hostname.css("background-color", "Aquamarine");
+                td_ipAdress.css("background-color", "Aquamarine");
+            }
+
+            $("#tablePeers").append($("<tr></tr>").append(td_hostname, td_ipAdress));
         }
 
-        $("#tablePeers").append($("<tr></tr>").append(tr_hostname, tr_ipAdress));
     }
 });
