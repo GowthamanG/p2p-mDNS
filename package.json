@@ -21,6 +21,7 @@
     "network-address": "^1.1.2"
   },
   "dependencies": {
+    "jquery": "^3.4.1",
     "multicast-dns": "latest"
   }
 }

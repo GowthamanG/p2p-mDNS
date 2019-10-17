@@ -53,5 +53,9 @@ ipcMain.on('MyPeer', function(event){
    event.reply('MyPeer', discover.getThisPeer());
 });
 
-if(appClosed)
+if(appClosed){
     discover.stopPeerdiscovery(mdns);
+    ipcMain.removeAllListeners('MyPeer');
+    ipcMain.removeAllListeners('Peers');
+}
+

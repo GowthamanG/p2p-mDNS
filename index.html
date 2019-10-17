@@ -1,78 +1,27 @@
 <!DOCTYPE html>
 
-<head>
+    <head>
 
-    <meta charset="UTF-8">
-    <title>P2P mDNS</title>
+        <meta charset="UTF-8">
+        <title>P2P mDNS</title>
 
-    <link rel="stylesheet" href="stylesheet.css">
+        <link rel="stylesheet" href="css/stylesheet.css">
+        <script type="text/javascript" src="js/script.js"></script>
 
-</head>
+    </head>
 
-<body>
+    <body>
 
-<div id="header">
-    <h1 id="p2p-title">Peer Discovery with mDNS</h1>
-</div>
+        <div id="header">
+            <h1 id="p2p-title">Peer Discovery with mDNS</h1>
+        </div>
 
+        <div id="Peers">
+            <table id="tablePeers"></table>
+        </div>
 
-<div id="Peers">
-    <ul id="listOfPeers"></ul>
-    <table id="tablePeers"></table>
-</div>
-
-<div id="RefreshButton">
-    <button id="Refresh">Refresh</button>
-</div>
-
-<script type="text/javascript">
-    const electron = require('electron');
-    const {ipcRenderer} = electron;
-    let ul = document.getElementById('listOfPeers');
-    let table = document.getElementById('tablePeers');
-    const Refresh = document.getElementById('Refresh');
-    let thisPeerHostName = '';
-    let thisPeerIp = '';
-
-    Refresh.addEventListener('click', function(){
-        ul.textContent = "";
-        table.textContent = "";
-        ipcRenderer.send('Peers');
-        ipcRenderer.send('MyPeer');
-    });
-
-    ipcRenderer.on('MyPeer', function(e, item){
-        thisPeerHostName = item.hostname;
-        thisPeerIp = item.ip;
-    });
-
-    ipcRenderer.on('Peers', function(e, item){
-
-        let th_1 = document.createElement('th');
-        let th_2 = document.createElement('th');
-        th_1.innerHTML = 'Hostname';
-        th_2.innerHTML = 'IPv4-Address';
-        table.appendChild(th_1);
-        table.appendChild(th_2);
-
-        for (let i = 0; i < item.length; i++) {
-            let tr = document.createElement('tr');
-            let td_1 = document.createElement('td');
-            let td_2 = document.createElement('td');
-            td_1.innerHTML = item[i].hostname;
-            td_2.innerHTML = item[i].ip;
-            tr.appendChild(td_1);
-            tr.appendChild(td_2);
-
-            if(thisPeerHostName === item[i].hostname && thisPeerIp === item[i].ip)
-                tr.style.backgroundColor = 'Aquamarine';
-
-            table.appendChild(tr);
-        }
-    });
-</script>
+    </body>
 
 
-</body>
 
 </html>
