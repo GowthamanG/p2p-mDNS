@@ -81,10 +81,6 @@ module.exports = {
                         peers.push(new Peer(response.answers[0].data.target, response.answers[1].data));
                 }
             }
-
-            console.log(peers);
-            console.log(peers.length);
-
         });
     },
 
